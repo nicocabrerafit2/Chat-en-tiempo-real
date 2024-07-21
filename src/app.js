@@ -11,19 +11,11 @@ app.set("view engine", "handlebars");
 app.use(express.static(__dirname + "/public"));
 
 const serverExpress = app.listen(PORT, () => {
-  console.log("Servidor corriendo en: http://localhost:" + PORT);
+  console.log("Server on http://localhost:" + PORT);
 });
-
+const users = await controller.getUsers()
 const serverSocket = new Server(serverExpress);
 serverSocket.on("connection", (socket) => {
   console.log("Nuevo dispositivo conectado");
-  socket.on("saludo", (data) => {
-    if (data) {
-      console.log("Mensaje del cliente:" + data);
-      socket.emit("respuesta", "ok si estamos conectados");
-    }
-  });
-});
-app.get("/", (req, res) => {
-  res.render("saludo");
+  socket.emit("newUser",users)
 });
