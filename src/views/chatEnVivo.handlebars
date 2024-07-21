@@ -1,17 +1,14 @@
 <h1>Chat en tiempo real</h1>
 
-<h2>{{countUsers}} Usuarios</h2>
+<h2 id="usersCount"></h2>
 <br>
 <h2>Lista de usuarios:</h2>
 
-{{#if countUsers !== 0}}
+<ul id="userList">
 
-<ul>
-    {{#each users}}
-      <li>{{this.name}}</li>
-    {{/each}}
+
   </ul>
-{{/if}}
+
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/index.js"></script>
