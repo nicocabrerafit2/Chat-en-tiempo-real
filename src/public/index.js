@@ -1,4 +1,10 @@
 const socket = io();
+const chatBox = document.querySelector('#chatBox');
+
+
+
+
+
 
 Swal.fire({
     title:'Ingrese su nombre',
@@ -12,6 +18,15 @@ Swal.fire({
     socket.emit('newUser', newUser );
 })
 
+chatBox.addEventListener('keyup',(event) => {
+    if(event.key === 'Enter'){
+        const message = event.target.value 
+        socket.emit('message',{  message })
+        chatBox.value = ''
+    }
+})
+
+
 socket.on("newUser", (users) => {
 const usersCount = document.querySelector("#usersCount")
 usersCount.innerHTML = users.length + " Usuarios"
@@ -23,3 +38,11 @@ users.forEach(user => {
     userList.appendChild(li);
 });
 });
+socket.on("chatActualized",(chatActualized)=>{
+const chat = document.querySelector("#chat")
+chatActualized.forEach(message => {
+    const li = document.createElement("li");
+    li.innerHTML = message.message;
+    chat.appendChild(li);
+});
+})

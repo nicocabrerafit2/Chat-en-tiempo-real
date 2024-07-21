@@ -1,6 +1,6 @@
 import fs from "fs"
 
-class controller {
+class controllerMain {
     constructor (path){
         this.path = path
     }
@@ -16,5 +16,6 @@ class controller {
       const userList = JSON.stringify(users,null, " ")
       await fs.promises.writeFile(this.path,userList)
     }
+    
 }
-export {controller} 
+export {controllerMain} 
