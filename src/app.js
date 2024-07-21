@@ -24,4 +24,8 @@ serverSocket.on("connection", async (socket) => {
   console.log("Nuevo dispositivo conectado");
   const users = await controllerMain.getUsers()
   socket.emit("newUser",users)
+  socket.on("newUser",async (newUser)=>{
+  await controllerMain.addUser({name:newUser})
+  socket.emit("newUser",users)
+  })
 });

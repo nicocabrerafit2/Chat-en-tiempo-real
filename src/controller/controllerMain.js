@@ -10,9 +10,11 @@ class controller {
           );
           return users;
     }
-
-   
-
-
+    async addUser (newUser){
+        const users =  await this.getUsers()
+      users.push(newUser)
+      const userList = JSON.stringify(users,null, " ")
+      await fs.promises.writeFile(this.path,userList)
+    }
 }
 export {controller} 
