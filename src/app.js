@@ -24,13 +24,17 @@ const controllerChatNew = new controllerChat(pathChat)
 const serverSocket = new Server(serverExpress);
 
 serverSocket.on("connection", async (socket) => {
-  console.log("Nuevo dispositivo conectado");
+
   const users = await controllerMainNew.getUsers()
   socket.emit("newUser",users)
+
+
   socket.on("newUser",async (newUser)=>{
   await controllerMainNew.addUser({name:newUser})
   socket.emit("newUser",users)
   })
+
+  
   socket.on("message",async (data)=>{
 await controllerChatNew.addChat(data)
 const chatActualized = await controllerChatNew.getChat()

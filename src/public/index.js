@@ -1,6 +1,6 @@
 const socket = io();
 const chatBox = document.querySelector('#chatBox');
-
+let user = ""
 
 
 
@@ -20,29 +20,34 @@ Swal.fire({
 
 chatBox.addEventListener('keyup',(event) => {
     if(event.key === 'Enter'){
-        const message = event.target.value 
-        socket.emit('message',{  message })
+        socket.emit('message',{  user, message:event.target.value  })
         chatBox.value = ''
     }
 })
 
-
-socket.on("newUser", (users) => {
-const usersCount = document.querySelector("#usersCount")
-usersCount.innerHTML = users.length + " Usuarios"
-const userList = document.querySelector("#userList")
-userList.innerHTML = "";
-users.forEach(user => {
-    const li = document.createElement("li");
-    li.innerHTML = user.name;
-    userList.appendChild(li);
-});
-});
-socket.on("chatActualized",(chatActualized)=>{
-const chat = document.querySelector("#chat")
-chatActualized.forEach(message => {
-    const li = document.createElement("li");
-    li.innerHTML = message.message;
-    chat.appendChild(li);
+socket.on("chatActualized",(data)=>{
+const chatConteiner = document.querySelector("#chat")
+chatConteiner.innerHTML=""
+data.forEach(chat => {
+    const div = document.createElement('div');
+    const nombre = document.createElement('p');
+    const mensaje = document.createElement('p');
+    nombre.innerText = chat.user === user ? 'Yo: ' : chat.user + ': ';
+    mensaje.innerText = chat.mensaje;
+    div.appendChild(nombre);
+    div.appendChild(mensaje);
+    chatConteiner.appendChild(div);
 });
 })
+
+socket.on("newUser", (users) => {
+    const usersCount = document.querySelector("#usersCount")
+    usersCount.innerHTML = users.length + " Usuarios"
+    const userList = document.querySelector("#userList")
+    userList.innerHTML = "";
+    users.forEach(user => {
+        const li = document.createElement("li");
+        li.innerHTML = user.name;
+        userList.appendChild(li);
+    });
+    });
