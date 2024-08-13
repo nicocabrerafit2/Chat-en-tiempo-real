@@ -23,7 +23,7 @@ const usuarios = [];
 
 serverSocket.on("connection", (socket) => {
   socket.on("mensaje", (data) => {
-    conversacion.push(data);
+    conversacion.unshift(data);
     serverSocket.emit("conversacion", conversacion);
   });
 
