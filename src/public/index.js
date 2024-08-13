@@ -1,49 +1,60 @@
+console.log("Js del cliente");
+const title = document.querySelector("#title-welcome");
+const chatBox = document.querySelector("#send");
 const socket = io();
-const chatBox = document.querySelector("#chatBox");
 let user = "";
 
 Swal.fire({
-  title: "Ingrese su nombre",
+  title: "Ingrese nickname",
   input: "text",
+  text: "Para ingresar al chat identificarse",
   allowOutsideClick: false,
   inputValidator: (value) => {
-    return !value && "Necesitas ingresar tu nombre";
+    // get a un endpoint que valide el nombre.
+    return !value && "Che ingresa un nombre capo";
   },
 }).then((result) => {
-  const newUser = result.value;
-  socket.emit("newUser", newUser);
+  user = result.value;
+  title.innerText = "Bienvenido al chat " + user;
+  socket.emit("nuevoUsuario", { user });
+  // quiero cargar el chat
 });
 
 chatBox.addEventListener("keyup", (event) => {
   if (event.key === "Enter") {
-    socket.emit("message", { user, message: event.target.value });
+    console.log("HOLA");
+    socket.emit("mensaje", { user, mensaje: event.target.value });
     chatBox.value = "";
   }
 });
 
-socket.on("chatActualized", (data) => {
-  const chatConteiner = document.querySelector("#chat");
-  chatConteiner.innerHTML = "";
+socket.on("conversacion", (data) => {
+  const contenedorChat = document.querySelector("#contenedor-chat");
+  contenedorChat.innerHTML = "";
   data.forEach((chat) => {
     const div = document.createElement("div");
     const nombre = document.createElement("p");
     const mensaje = document.createElement("p");
     nombre.innerText = chat.user === user ? "Yo: " : chat.user + ": ";
+    nombre.classList.add("bold_name");
     mensaje.innerText = chat.mensaje;
     div.appendChild(nombre);
     div.appendChild(mensaje);
-    chatConteiner.appendChild(div);
+    contenedorChat.appendChild(div);
   });
 });
 
-socket.on("newUser", (users) => {
-  const usersCount = document.querySelector("#usersCount");
-  usersCount.innerHTML = users.length + " Usuarios conectados";
-  const userList = document.querySelector("#userList");
-  userList.innerHTML = "";
-  users.forEach((user) => {
+socket.on("conectados", (listaUsuarios) => {
+  const conectadosContainer = document.querySelector("#conectados");
+  conectadosContainer.innerHTML = "";
+  listaUsuarios.forEach((usuario) => {
     const li = document.createElement("li");
-    li.innerHTML = user.name;
-    userList.appendChild(li);
+    li.innerText = usuario.user === user ? user + " - (Yo)" : usuario.user;
+    conectadosContainer.appendChild(li);
   });
 });
+
+// window.addEventListener('beforeunload',() => {
+//     socket.emit('disconect', {user})
+// } )
+// cliente emite un evento disconnect y adjunto el usuario

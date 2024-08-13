@@ -2,10 +2,8 @@ import express from "express";
 import handlebars from "express-handlebars";
 import { __dirname } from "./utils.js";
 import { Server } from "socket.io";
-import { controllerMain } from "./controller/controllerMain.js";
-import { controllerChat } from "./controller/controllerChat.js";
-const pathUsers = __dirname + "/data/users.json";
-const pathChat = __dirname + "/data/chat.json";
+import { router } from "./routes/viewsRouters.js";
+
 const app = express();
 const PORT = 8080;
 
@@ -13,31 +11,29 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 app.use(express.static(__dirname + "/public"));
+app.use("/", router);
 
 const serverExpress = app.listen(PORT, () => {
   console.log("Server on http://localhost:" + PORT);
 });
-const controllerMainNew = new controllerMain(pathUsers);
-const controllerChatNew = new controllerChat(pathChat);
+
 const serverSocket = new Server(serverExpress);
+const conversacion = [];
+const usuarios = [];
 
-serverSocket.on("connection", async (socket) => {
-  const users = await controllerMainNew.getUsers();
-  socket.emit("newUser", users);
-
-  socket.on("newUser", async (newUser) => {
-    await controllerMainNew.addUser({ name: newUser });
-    socket.emit("newUser", users);
+serverSocket.on("connection", (socket) => {
+  socket.on("mensaje", (data) => {
+    conversacion.push(data);
+    serverSocket.emit("conversacion", conversacion);
   });
 
-  socket.on("message", async (data) => {
-    await controllerChatNew.addChat(data);
-    const chatActualized = await controllerChatNew.getChat();
-    console.log(chatActualized);
-    socket.emit("chatActualized", chatActualized);
+  socket.on("nuevoUsuario", (nuevoUsuario) => {
+    usuarios.push(nuevoUsuario);
+    socket.emit("conversacion", conversacion);
+    serverSocket.emit("conectados", usuarios);
   });
-});
-app.get("/", (req, res) => {
-  //validar datos antes de enviar el render
-  res.render("chatEnVivo");
+
+  socket.on("disconect", (usuario) => {
+    // buscar el usuario borrarlo de la lista y emitir a todos la nueva lista
+  });
 });
