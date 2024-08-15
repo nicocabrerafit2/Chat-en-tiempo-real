@@ -6,7 +6,6 @@ let user = "";
 Swal.fire({
   title: "Ingresa tu nombre de usuario",
   input: "text",
-  text: "Para ingresar al chat identificarse",
   allowOutsideClick: false,
   inputValidator: (value) => {
     // get a un endpoint que valide el nombre.
@@ -14,7 +13,7 @@ Swal.fire({
   },
 }).then((result) => {
   user = result.value;
-  title.innerText = "Bienvenido al chat: " + user;
+  title.innerText = "Bienvenido al chat " + user;
   socket.emit("nuevoUsuario", { user });
   // quiero cargar el chat
 });
