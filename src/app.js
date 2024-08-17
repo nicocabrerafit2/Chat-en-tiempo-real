@@ -33,7 +33,11 @@ serverSocket.on("connection", (socket) => {
     serverSocket.emit("conectados", usuarios);
   });
 
-  socket.on("disconect", (usuario) => {
-    // buscar el usuario borrarlo de la lista y emitir a todos la nueva lista
+  socket.on("disconect", (userToDelete) => {
+    const index = usuarios.findIndex((eachUser) => eachUser.user === userToDelete);
+    usuarios.splice(index, 1)    
+    serverSocket.emit("conectados", usuarios);
+  
+    
   });
 });

@@ -8,14 +8,14 @@ Swal.fire({
   input: "text",
   allowOutsideClick: false,
   inputValidator: (value) => {
-    // get a un endpoint que valide el nombre.
+
     return !value && "Se debe identificar primero";
   },
 }).then((result) => {
   user = result.value;
   title.innerText = "Bienvenido al chat " + user;
   socket.emit("nuevoUsuario", { user });
-  // quiero cargar el chat
+
 });
 
 chatBox.addEventListener("keyup", (event) => {
@@ -48,9 +48,11 @@ socket.on("conectados", (listaUsuarios) => {
     li.innerText = usuario.user === user ? user + " - (Yo)" : usuario.user;
     conectadosContainer.appendChild(li);
   });
+  const count = document.querySelector("#conectados__titulo");
+  count.innerHTML = "Usuarios: "+listaUsuarios.length;
+
 });
 
-// window.addEventListener('beforeunload',() => {
-//     socket.emit('disconect', {user})
-// } )
-// cliente emite un evento disconnect y adjunto el usuario
+ window.addEventListener('beforeunload',() => {
+     socket.emit('disconect', user)
+} )
