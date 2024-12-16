@@ -1,0 +1,121 @@
+body {
+  background-image: url("https://images.vexels.com/media/users/3/77984/raw/1f24a0852122028df239ed0cd68ed82e-dibujo-del-panel-solar.jpg");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.bodyTotal {
+  display: flex;
+  min-height: 100vh;
+  gap: 20px;
+  padding: 20px;
+}
+
+.chat-container {
+  flex: 1;
+  max-width: 70%;
+}
+
+.users-sidebar {
+  width: 250px;
+  position: sticky;
+  top: 20px;
+  height: 60vh;
+  padding: 15px;
+  border: 2px solid var(--primary-border);
+  border-radius: var(--primary-radius);
+  box-shadow: 0 0 10px var(--primary-shadow);
+}
+
+.chat-input {
+  margin: 20px 0;
+}
+
+#contenedor-chat {
+  height: 60vh;
+  overflow-y: auto;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: transparent;
+  border-radius: 8px;
+  color: rgb(0, 0, 0);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#send {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  color: rgb(0, 0, 0);
+  border-radius: 4px;
+}
+
+#send::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#conectados {
+  list-style: none;
+  padding: 0;
+  max-height: calc(100% - 40px);
+  overflow-y: auto;
+}
+
+#conectados li {
+  padding: 5px 0;
+  padding-left: 25px;
+  position: relative;
+  color: rgb(0, 0, 0);
+}
+
+#conectados li::before {
+  content: "👤";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#conectados__titulo {
+  color: rgb(0, 0, 0);
+}
+
+/* Para que los mensajes del chat sean visibles */
+#contenedor-chat p {
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilizar la barra de scroll */
+#conectados::-webkit-scrollbar {
+  width: 6px;
+}
+
+#conectados::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+#conectados::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+#conectados::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Agregar variables CSS */
+:root {
+  --primary-border: rgba(0, 0, 0, 0.3);
+  --primary-shadow: rgba(0, 0, 0, 0.2);
+  --primary-text: rgb(0, 0, 0);
+  --primary-radius: 8px;
+}
