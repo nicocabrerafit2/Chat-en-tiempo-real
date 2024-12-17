@@ -3,11 +3,10 @@ import { config } from '../config/config.js';
 
 class UserService {
   constructor() {
-    this.users = [];
+    this.users = new Map();
   }
 
   addUser(username) {
-    // Validación de datos
     if (!username || typeof username !== 'string') {
       throw new Error('Nombre de usuario inválido');
     }
@@ -16,32 +15,29 @@ class UserService {
       throw new Error('El nombre debe tener al menos 3 caracteres');
     }
 
-    if (this.users.length >= config.maxUsers) {
+    if (this.users.size >= config.maxUsers) {
       throw new Error("Cantidad de usuarios alcanzada");
     }
 
-    if (this.isUsernameTaken(username)) {
+    if (this.users.has(username)) {
       throw new Error("Nombre de usuario ya está en uso");
     }
 
     const newUser = new User(username);
-    this.users.push(newUser);
+    this.users.set(username, newUser);
     return newUser;
   }
 
   removeUser(username) {
-    const index = this.users.findIndex(u => u.user === username);
-    if (index !== -1) {
-      return this.users.splice(index, 1)[0];
-    }
+    return this.users.delete(username);
   }
 
   isUsernameTaken(username) {
-    return this.users.some(u => u.user === username);
+    return this.users.has(username);
   }
 
   getUsers() {
-    return [...this.users]; // Retornar copia para evitar mutaciones
+    return Array.from(this.users.values());
   }
 }
 

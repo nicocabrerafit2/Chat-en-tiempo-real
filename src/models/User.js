@@ -3,6 +3,7 @@ class User {
     this.user = username;
     this.connected = true;
     this.joinedAt = new Date();
+    this.lastActivity = Date.now();
   }
 }
 

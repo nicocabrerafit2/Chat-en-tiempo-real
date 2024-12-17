@@ -1,10 +1,12 @@
 body {
-  background-image: url("https: //images.pexels.com/photos/356036/pexels-photo-356036.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+  background-image: url("https://wallpapers.com/images/featured/sin-derechos-de-autor-ia4f27yk6qnz364p.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   min-height: 100vh;
   margin: 0;
+  background-color: #f0f0f0;
+  overflow: hidden;
 }
 
 * {
@@ -164,53 +166,58 @@ body {
     flex-direction: column;
     padding: 10px;
     height: 100vh;
-    overflow: hidden;
     position: fixed;
     width: 100%;
     top: 0;
     left: 0;
+    overflow: hidden;
   }
 
   .chat-container {
     max-width: 100%;
-    height: 65vh;
+    height: 70vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
   }
 
   #contenedor-chat {
     flex: 1;
-    height: auto;
-    margin-bottom: 10px;
     overflow-y: auto;
+    margin-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
   }
 
   .users-sidebar {
     width: 100%;
-    height: 25vh;
-    position: fixed;
+    height: 30vh;
     bottom: 0;
     left: 0;
     padding: 10px;
-    background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
+    z-index: 1000;
+  }
+
+  #conectados {
+    height: calc(100% - 40px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .input-container {
     position: relative;
-    background-color: rgba(255, 255, 255, 0.1);
     padding: 5px;
     border-radius: 4px;
     margin-bottom: 10px;
   }
 
-  #send-button {
-    min-width: 60px;
+  /* Estilizar scrollbars para móviles */
+  #contenedor-chat::-webkit-scrollbar,
+  #conectados::-webkit-scrollbar {
+    width: 4px;
   }
 
-  #conectados {
-    max-height: calc(100% - 30px);
-    overflow-y: auto;
+  #contenedor-chat::-webkit-scrollbar-thumb,
+  #conectados::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
   }
 }

@@ -52,13 +52,10 @@ class ChatController {
 
   static handleNewUser(socket, io, data) {
     try {
-      if (!data.user || data.user.length < LIMITS.MIN_USERNAME_LENGTH) {
-        throw new Error(`El nombre de usuario debe tener al menos ${LIMITS.MIN_USERNAME_LENGTH} caracteres`);
-      }
-
       const user = userService.addUser(data.user);
       socket.emit('conversacion', chatService.getMessages());
-      io.emit('conectados', userService.getUsers());
+      const userList = userService.getUsers();
+      io.emit('conectados', userList);
     } catch (error) {
       socket.emit('errorMessage', {
         type: 'error',

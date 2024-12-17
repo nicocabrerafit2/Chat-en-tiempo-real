@@ -36,6 +36,7 @@ function sendMessage() {
   if (message && user) {
     socket.emit("mensaje", { user, mensaje: message });
     chatBox.value = "";
+    chatBox.focus();
   }
 }
 
@@ -80,32 +81,30 @@ socket.on("conectados", (listaUsuarios) => {
 function handleDisconnection() {
   if (user) {
     socket.emit('userDisconnected', { user });
-    // Forzamos la desconexión
     socket.disconnect();
+    user = ""; // Limpiamos el usuario
   }
 }
 
-// Para navegadores de escritorio
+// Eventos de desconexión
 window.addEventListener('beforeunload', handleDisconnection);
-
-// Para dispositivos móviles
 window.addEventListener('pagehide', handleDisconnection);
 window.addEventListener('unload', handleDisconnection);
 
 // Cuando el socket se desconecta
 socket.on('disconnect', () => {
   if (user) {
-    socket.emit('userDisconnected', { user });
+    handleDisconnection();
   }
 });
 
 // Cuando la app vuelve a estar activa
 window.addEventListener('pageshow', (event) => {
-  if (user) {
+  if (!socket.connected && user) {
     socket.connect();
     setTimeout(() => {
       socket.emit('nuevoUsuario', { user });
-    }, 500); // Pequeño delay para asegurar la conexión
+    }, 500);
   }
 });
 
@@ -114,6 +113,17 @@ socket.on('connect', () => {
   if (user) {
     socket.emit('nuevoUsuario', { user });
   }
+});
+
+// Ping periódico para mantener la conexión activa
+setInterval(() => {
+  if (socket.connected && user) {
+    socket.emit('ping');
+  }
+}, 5000);
+
+socket.on('pong', () => {
+  // Conexión sigue activa
 });
 
 socket.on("warningMessage", (data) => {
