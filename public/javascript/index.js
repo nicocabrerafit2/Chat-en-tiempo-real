@@ -80,6 +80,8 @@ socket.on("conectados", (listaUsuarios) => {
 function handleDisconnection() {
   if (user) {
     socket.emit('userDisconnected', { user });
+    // Forzamos la desconexión
+    socket.disconnect();
   }
 }
 
@@ -88,18 +90,22 @@ window.addEventListener('beforeunload', handleDisconnection);
 
 // Para dispositivos móviles
 window.addEventListener('pagehide', handleDisconnection);
+window.addEventListener('unload', handleDisconnection);
 
 // Cuando el socket se desconecta
-socket.on('disconnect', handleDisconnection);
+socket.on('disconnect', () => {
+  if (user) {
+    socket.emit('userDisconnected', { user });
+  }
+});
 
 // Cuando la app vuelve a estar activa
 window.addEventListener('pageshow', (event) => {
   if (user) {
-    // Si es una restauración desde caché, reconectar
-    if (event.persisted) {
-      socket.connect();
-    }
-    socket.emit('nuevoUsuario', { user });
+    socket.connect();
+    setTimeout(() => {
+      socket.emit('nuevoUsuario', { user });
+    }, 500); // Pequeño delay para asegurar la conexión
   }
 });
 

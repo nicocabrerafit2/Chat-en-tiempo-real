@@ -1,5 +1,5 @@
 body {
-  background-image: url("https://images.vexels.com/media/users/3/77984/raw/1f24a0852122028df239ed0cd68ed82e-dibujo-del-panel-solar.jpg");
+  background-image: url("https: //images.pexels.com/photos/356036/pexels-photo-356036.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -81,7 +81,7 @@ body {
 }
 
 #conectados li::before {
-  content: "��";
+  content: "👤";
   position: absolute;
   left: 0;
   top: 50%;
@@ -165,13 +165,18 @@ body {
     padding: 10px;
     height: 100vh;
     overflow: hidden;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
   }
 
   .chat-container {
     max-width: 100%;
-    height: 70vh;
+    height: 65vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   #contenedor-chat {
@@ -183,17 +188,21 @@ body {
 
   .users-sidebar {
     width: 100%;
-    height: 30vh;
-    position: relative;
-    top: 0;
+    height: 25vh;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
   }
 
   .input-container {
-    position: sticky;
-    bottom: 0;
+    position: relative;
     background-color: rgba(255, 255, 255, 0.1);
     padding: 5px;
     border-radius: 4px;
+    margin-bottom: 10px;
   }
 
   #send-button {
