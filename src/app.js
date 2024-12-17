@@ -44,7 +44,7 @@ const PORT = process.env.PORT || 8080;
 const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
 
 const server = app.listen(PORT, HOST, () => {
-  console.log(`Server running on ${process.env.RAILWAY_STATIC_URL || `http://${HOST}:${PORT}`}`);
+  console.log(`Server running on ${config.appUrl}`);
 }).on('error', (err) => {
   console.error('Error starting server:', err);
 });
