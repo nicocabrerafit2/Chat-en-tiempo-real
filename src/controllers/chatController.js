@@ -1,5 +1,6 @@
 import chatService from '../services/chatService.js';
 import userService from '../services/userService.js';
+import { LIMITS } from '../config/constants.js';
 
 class ChatController {
   static async renderHome(req, res) {
@@ -16,6 +17,14 @@ class ChatController {
 
   static handleCheckUsername(socket, username, callback) {
     try {
+      if (!username || username.length < LIMITS.MIN_USERNAME_LENGTH) {
+        callback({
+          available: false,
+          error: `El nombre de usuario debe tener al menos ${LIMITS.MIN_USERNAME_LENGTH} caracteres`
+        });
+        return;
+      }
+
       const isAvailable = !userService.isUsernameTaken(username);
       callback({
         available: isAvailable,
@@ -43,6 +52,10 @@ class ChatController {
 
   static handleNewUser(socket, io, data) {
     try {
+      if (!data.user || data.user.length < LIMITS.MIN_USERNAME_LENGTH) {
+        throw new Error(`El nombre de usuario debe tener al menos ${LIMITS.MIN_USERNAME_LENGTH} caracteres`);
+      }
+
       const user = userService.addUser(data.user);
       socket.emit('conversacion', chatService.getMessages());
       io.emit('conectados', userService.getUsers());

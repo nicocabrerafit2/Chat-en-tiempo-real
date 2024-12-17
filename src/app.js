@@ -40,7 +40,7 @@ app.use(express.static(join(__dirname, "../public")));
 app.use("/", router);
 
 // Inicializar servidor
-const server = app.listen(config.port, () => {
+const server = app.listen(config.port, config.host, () => {
   console.log(`Server running on ${config.appUrl}`);
 }).on('error', (err) => {
   console.error('Error starting server:', err);
