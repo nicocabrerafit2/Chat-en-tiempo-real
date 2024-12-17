@@ -1,5 +1,6 @@
 const title = document.querySelector("#title-welcome");
 const chatBox = document.querySelector("#send");
+const sendButton = document.querySelector("#send-button");
 const socket = io();
 let user = "";
 
@@ -29,25 +30,25 @@ Swal.fire({
   chatBox.focus();
 });
 
-chatBox.addEventListener("keyup", (event) => {
-  if (event.key === "Enter" && chatBox.value.trim()) {
-    const mensaje = chatBox.value;
+// Función para enviar mensaje
+function sendMessage() {
+  const message = chatBox.value.trim();
+  if (message && user) {
+    socket.emit("mensaje", { user, mensaje: message });
     chatBox.value = "";
-    
-    socket.emit("mensaje", { user, mensaje }, (response) => {
-      if (response && response.error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: response.error,
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 3000
-        });
-      }
-    });
   }
+}
+
+// Evento para tecla Enter
+chatBox.addEventListener("keyup", (event) => {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+});
+
+// Evento para botón de enviar
+sendButton.addEventListener("click", () => {
+  sendMessage();
 });
 
 socket.on("conversacion", (data) => {
@@ -75,17 +76,37 @@ socket.on("conectados", (listaUsuarios) => {
   });
 });
 
-// Maneja la desconexión del usuario intencionada cerrando la pestaña
-window.addEventListener('beforeunload', () => {
+// Maneja la desconexión del usuario
+function handleDisconnection() {
   if (user) {
     socket.emit('userDisconnected', { user });
   }
+}
+
+// Para navegadores de escritorio
+window.addEventListener('beforeunload', handleDisconnection);
+
+// Para dispositivos móviles
+window.addEventListener('pagehide', handleDisconnection);
+
+// Cuando el socket se desconecta
+socket.on('disconnect', handleDisconnection);
+
+// Cuando la app vuelve a estar activa
+window.addEventListener('pageshow', (event) => {
+  if (user) {
+    // Si es una restauración desde caché, reconectar
+    if (event.persisted) {
+      socket.connect();
+    }
+    socket.emit('nuevoUsuario', { user });
+  }
 });
 
-// Maneja la desconexión del usuario cuando el socket se desconecta por error (sin internet, etc)
-socket.on('disconnect', () => {
+// Cuando el socket se reconecta
+socket.on('connect', () => {
   if (user) {
-    socket.emit('userDisconnected', { user });
+    socket.emit('nuevoUsuario', { user });
   }
 });
 

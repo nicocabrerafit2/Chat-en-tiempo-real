@@ -69,8 +69,10 @@ class ChatController {
 
   static handleDisconnection(socket, io, { user }) {
     try {
-      userService.removeUser(user);
-      io.emit('conectados', userService.getUsers());
+      if (user) {
+        userService.removeUser(user);
+        io.emit('conectados', userService.getUsers());
+      }
     } catch (error) {
       console.error('Error handling disconnection:', error);
     }

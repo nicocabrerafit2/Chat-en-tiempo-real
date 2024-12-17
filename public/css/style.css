@@ -1,5 +1,10 @@
 body {
   background-image: url("https://images.vexels.com/media/users/3/77984/raw/1f24a0852122028df239ed0cd68ed82e-dibujo-del-panel-solar.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  margin: 0;
 }
 
 * {
@@ -76,7 +81,7 @@ body {
 }
 
 #conectados li::before {
-  content: "👤";
+  content: "��";
   position: absolute;
   left: 0;
   top: 50%;
@@ -118,4 +123,85 @@ body {
   --primary-shadow: rgba(0, 0, 0, 0.2);
   --primary-text: rgb(0, 0, 0);
   --primary-radius: 8px;
+}
+
+.input-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+#send {
+  flex: 1;
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  color: rgb(0, 0, 0);
+  border-radius: 4px;
+}
+
+#send-button {
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#send-button:hover {
+  background-color: #45a049;
+}
+
+#send-button:active {
+  background-color: #3d8b40;
+}
+
+/* Media query para móviles */
+@media (max-width: 768px) {
+  .bodyTotal {
+    flex-direction: column;
+    padding: 10px;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .chat-container {
+    max-width: 100%;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #contenedor-chat {
+    flex: 1;
+    height: auto;
+    margin-bottom: 10px;
+    overflow-y: auto;
+  }
+
+  .users-sidebar {
+    width: 100%;
+    height: 30vh;
+    position: relative;
+    top: 0;
+  }
+
+  .input-container {
+    position: sticky;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 5px;
+    border-radius: 4px;
+  }
+
+  #send-button {
+    min-width: 60px;
+  }
+
+  #conectados {
+    max-height: calc(100% - 30px);
+    overflow-y: auto;
+  }
 }
