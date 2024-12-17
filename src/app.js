@@ -40,8 +40,11 @@ app.use(express.static(join(__dirname, "../public")));
 app.use("/", router);
 
 // Inicializar servidor
-const server = app.listen(config.port, config.host, () => {
-  console.log(`Server running on ${config.appUrl}`);
+const PORT = process.env.PORT || 8080;
+const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
+
+const server = app.listen(PORT, HOST, () => {
+  console.log(`Server running on ${process.env.RAILWAY_STATIC_URL || `http://${HOST}:${PORT}`}`);
 }).on('error', (err) => {
   console.error('Error starting server:', err);
 });
