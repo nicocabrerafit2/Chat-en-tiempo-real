@@ -1,6 +1,7 @@
 import Message from '../models/Message.js';
 import { config } from '../config/config.js';
 
+
 class ChatService {
   constructor() {
     this.messages = [];

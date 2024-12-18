@@ -1,6 +1,6 @@
 import User from '../models/User.js';
 import { config } from '../config/config.js';
-
+import { LIMITS } from '../config/constants.js';
 class UserService {
   constructor() {
     this.users = new Map();
@@ -11,8 +11,11 @@ class UserService {
       throw new Error('Nombre de usuario inválido');
     }
 
-    if (username.length < 3) {
-      throw new Error('El nombre debe tener al menos 3 caracteres');
+    if (username.length < LIMITS.MIN_USERNAME_LENGTH) {
+      throw new Error(`El nombre debe tener al menos ${LIMITS.MIN_USERNAME_LENGTH} caracteres`);
+    }
+     if (username.length >   LIMITS.MAX_USERNAME_LENGTH) {
+      throw new Error(`El nombre no puede tener más de ${LIMITS.MAX_USERNAME_LENGTH} caracteres`);
     }
 
     if (this.users.size >= config.maxUsers) {

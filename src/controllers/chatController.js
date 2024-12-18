@@ -24,6 +24,13 @@ class ChatController {
         });
         return;
       }
+      if (username.length > LIMITS.MAX_USERNAME_LENGTH) {
+        callback({
+          available: false,
+          error: `El nombre de usuario no puede tener más de ${LIMITS.MAX_USERNAME_LENGTH} caracteres`
+        });
+        return;
+        }
 
       const isAvailable = !userService.isUsernameTaken(username);
       callback({
@@ -40,6 +47,15 @@ class ChatController {
 
   static handleMessage(socket, io, data) {
     try {
+      if (data.mensaje.length > LIMITS.MAX_MESSAGE_LENGTH) {
+        socket.emit('errorMessage', {
+          type: 'error',
+          message: `El mensaje no puede tener más de ${LIMITS.MAX_MESSAGE_LENGTH} caracteres`,
+          keepText: true
+        });
+        return;
+      }
+
       const message = chatService.addMessage(data.user, data.mensaje);
       io.emit('conversacion', chatService.getMessages());
     } catch (error) {

@@ -8,9 +8,29 @@ Swal.fire({
   title: "Ingresa tu nombre de usuario",
   input: "text",
   allowOutsideClick: false,
+  inputAttributes: {
+    maxlength: 20  // Límite de caracteres para username
+  },
+  didOpen: () => {
+    // Obtener el input del SweetAlert
+    const input = Swal.getInput();
+    
+    // Agregar evento para mostrar advertencia
+    input.addEventListener('input', function() {
+      if (this.value.length >= 20) {
+        Swal.showValidationMessage('Has alcanzado el límite de caracteres');
+      } else {
+        Swal.resetValidationMessage();
+      }
+    });
+  },
   inputValidator: (value) => {
     if (!value) {
       return "Se debe identificar primero";
+    }
+    
+    if (value.length >= 20) {
+      return "El nombre no puede tener más de 20 caracteres";
     }
     
     return new Promise((resolve) => {
@@ -35,8 +55,6 @@ function sendMessage() {
   const message = chatBox.value.trim();
   if (message && user) {
     socket.emit("mensaje", { user, mensaje: message });
-    chatBox.value = "";
-    chatBox.focus();
   }
 }
 
@@ -65,6 +83,8 @@ socket.on("conversacion", (data) => {
     div.appendChild(mensaje);
     contenedorChat.appendChild(div);
   });
+  chatBox.value = "";
+  chatBox.focus();
 });
 
 socket.on("conectados", (listaUsuarios) => {
@@ -148,4 +168,23 @@ socket.on("errorMessage", (data) => {
     showConfirmButton: false,
     timer: 3000
   });
+  
+  if (!data.keepText) {
+    chatBox.value = "";
+  }
+  chatBox.focus();
+});
+
+chatBox.addEventListener('input', function() {
+  if (this.value.length >= 500) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Límite alcanzado',
+      text: 'Has alcanzado el límite de 500 caracteres',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1000
+    });
+  }
 });

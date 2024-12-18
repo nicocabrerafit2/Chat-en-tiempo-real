@@ -152,5 +152,12 @@ Variables de entorno disponibles en `.env`:
 
 Este proyecto está bajo la Licencia ISC.
 
+## Despliegue
+
+El archivo `Procfile` en la raíz del proyecto se utiliza para especificar los comandos que deben ejecutarse para iniciar la aplicación. Sin embargo, este archivo puede no ser necesario dependiendo de la plataforma de despliegue que se utilice:
+
+- Para Heroku: El Procfile es necesario para definir los procesos de la aplicación
+- Para plataformas como Vercel, Netlify o Railway: El Procfile no es necesario, ya que estas plataformas utilizan la configuración del `package.json` directamente
+
 ```
 src
